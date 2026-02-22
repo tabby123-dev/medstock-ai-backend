@@ -1,7 +1,7 @@
 import { transports, format } from 'winston';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import { ConfigService } from '@nestjs/config';
-import * as DailyRotateFile from 'winston-daily-rotate-file';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 export const loggerConfig = (configService: ConfigService) => {
   const nodeEnv = configService.get('NODE_ENV') || 'development';
