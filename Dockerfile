@@ -1,7 +1,7 @@
 # Use Node.js official image
 FROM node:18-alpine
 
-# Set working directory
+# Set working director
 WORKDIR /app
 
 # Copy package.json first (for caching)
