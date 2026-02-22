@@ -1,0 +1,58 @@
+name: Deploy Backend to EC2 (Docker)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: amazon-linux
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH access
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add EC2 to known hosts
+        run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            # Navigate or create app directory
+            mkdir -p ~/backend
+            cd ~/backend
+
+            # Remove old files
+            rm -rf *
+
+          EOF
+
+      - name: Copy project files to EC2
+        run: |
+          rsync -avz --delete ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/backend
+
+      - name: Build and run Docker container
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd ~/backend
+
+            # Build Docker image
+            docker build -t backend:latest .
+
+            # Stop and remove old container if exists
+            docker rm -f backend || true
+
+            # Run new container with MongoDB Atlas URI
+            docker run -d \
+              --name backend \
+              -p 3000:3000 \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              backend:latest
+          EOF
