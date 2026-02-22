@@ -18,6 +18,7 @@ EXPOSE 5000
 
 # Set environment variable default (can be overridden)
 ENV MONGO_URI=""
+ENV JWT_SECRET=""
 
 # Start the backend
 CMD ["npm", "start"]
