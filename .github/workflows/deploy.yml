@@ -50,9 +50,10 @@ jobs:
             docker rm -f backend || true
 
             # Run new container with MongoDB Atlas URI
-            docker run -d \
-              --name backend \
-              -p 3000:3000 \
-              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              backend:latest
+          docker run -d \
+            --name backend \
+            -p 3000:3000 \
+            -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            backend:latest
           EOF
