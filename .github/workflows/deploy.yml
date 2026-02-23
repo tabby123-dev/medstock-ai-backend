@@ -46,7 +46,7 @@ jobs:
             docker build -t backend .
 
             # Stop and remove old container if exists
-            docker rm -f backend || true
+            docker rm -f backend || true 
 
             # Run new container with MongoDB Atlas URI
             docker run -d \
