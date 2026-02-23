@@ -31,7 +31,6 @@ jobs:
 
             # Remove old files
             rm -rf *
-
           EOF
 
       - name: Copy project files to EC2
@@ -50,11 +49,14 @@ jobs:
             docker rm -f backend || true
 
             # Run new container with MongoDB Atlas URI
-          docker run -d \
-            --name backend \
-            --network app-network
-            -p 3000:3000 \
-            -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-            backend
+            docker run -d \
+              --name backend \
+              --network app-network \
+              -p 3000:3000 \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+              backend
           EOF
+
+
+      
