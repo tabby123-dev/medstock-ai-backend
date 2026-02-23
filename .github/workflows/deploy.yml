@@ -44,7 +44,7 @@ jobs:
             cd ~/backend
 
             # Build Docker image
-            docker build -t backend:latest .
+            docker build -t backend .
 
             # Stop and remove old container if exists
             docker rm -f backend || true
@@ -56,5 +56,5 @@ jobs:
             -p 3000:3000 \
             -e MONGO_URI="${{ secrets.MONGO_URI }}" \
             -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-            backend:latest
+            backend
           EOF
