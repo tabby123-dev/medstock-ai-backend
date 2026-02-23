@@ -52,6 +52,7 @@ jobs:
             # Run new container with MongoDB Atlas URI
           docker run -d \
             --name backend \
+            --network app-network
             -p 3000:3000 \
             -e MONGO_URI="${{ secrets.MONGO_URI }}" \
             -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
